@@ -1,0 +1,37 @@
+version: "3.9"
+services:
+  nginx:
+    image: "nginx:latest"
+    container_name: nginx
+    ports:
+      - "80:80"
+    volumes: 
+      - ./conf:/etc/nginx/conf.d
+      - ./html:/usr/share/nginx/html
+    depends_on:
+      - flask
+
+  flask:
+    image: "eselidze2/flask:1.0"
+    container_name: flask
+    environment:
+      - FLASK_DEBUG=True
+      - PYTHONUNBUFFERED=True
+    volumes:
+      - ./app:/app
+    ports:
+      - "5000:5000"
+    command: sh -c "pip install -r requirements.txt && python app.py"
+    depends_on:
+      - postgres
+
+  postgres:
+    image: "postgres:15.0-alpine"
+    container_name: postgres
+    environment:
+      POSTGRES_PASSWORD: Password!
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./data:/var/lib/postgresql/data
+      - ./kti-infrastructure/init.sql:/docker-entrypoint-initdb.d/init.
