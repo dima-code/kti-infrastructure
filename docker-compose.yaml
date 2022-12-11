@@ -34,4 +34,4 @@ services:
       - "5432:5432"
     volumes:
       - ./data:/var/lib/postgresql/data
-      - ./kti-infrastructure/init.sql:/docker-entrypoint-initdb.d/init.
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
